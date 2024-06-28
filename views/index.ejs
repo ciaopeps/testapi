@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Google Sheet Data</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 20px;
+            background-color: #f4f4f9;
+            color: #333;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #4CAF50;
+            color: white;
+        }
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+        input[type="text"] {
+            width: 100%;
+            padding: 6px;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        form {
+            margin-top: 20px;
+        }
+        a {
+            text-decoration: none;
+            color: #4CAF50;
+            font-size: 16px;
+        }
+        a:hover {
+            color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <h1>Google Sheets Data</h1>
+    <form action="/update" method="post">
+        <table>
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Name</th>
+                    <th>Unstable</th>
+                    <th>Alert type</th>
+                    <th>Alert details</th>
+                    <th>Issue closed?</th>
+                    <th>Severity</th>
+                    <th>Current coverage</th>
+                    <th>Open Investigation</th>
+                    <th>Date Investigation Closed</th>
+                    <th>Initial Comment</th>
+                    <th>Escalation Comment</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% if (data && data.length > 0) { %>
+                    <% for (let rowIndex = 0; rowIndex < 50; rowIndex++) { %>
+                        <tr>
+                            <% for (let colIndex = 0; colIndex < 12; colIndex++) { %>
+                                <td>
+                                    <input type="text" 
+                                           name="R<%= rowIndex %>C<%= colIndex %>" 
+                                           value="<%= data[rowIndex] && data[rowIndex][colIndex] ? data[rowIndex][colIndex] : '' %>" />
+                                </td>
+                            <% } %>
+                        </tr>
+                    <% } %>
+                <% } else { %>
+                    <tr><td colspan="12">No data available</td></tr>
+                <% } %>
+            </tbody>
+        </table>
+        <button type="submit">Save Changes</button>
+    </form>
+    <div>
+        <% if (currentPage > 1) { %>
+            <a href="/sheet?page=<%= currentPage - 1 %>">Previous</a>
+        <% } %>
+        <% if (currentPage < numPages) { %>
+            <a href="/sheet?page=<%= currentPage + 1 %>">Next</a>
+        <% } %>
+    </div>
+</body>
+</html>
